@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
-"""models.py
+"""
+models.py
 
 Udacity conference server-side Python App Engine data & ProtoRPC models
 
@@ -64,17 +65,44 @@ class ConferenceForm(messages.Message):
     organizerUserId = messages.StringField(3)
     topics          = messages.StringField(4, repeated=True)
     city            = messages.StringField(5)
-    startDate       = messages.StringField(6) #DateTimeField()
+    startDate       = messages.StringField(6) 
     month           = messages.IntegerField(7, variant=messages.Variant.INT32)
     maxAttendees    = messages.IntegerField(8, variant=messages.Variant.INT32)
     seatsAvailable  = messages.IntegerField(9, variant=messages.Variant.INT32)
-    endDate         = messages.StringField(10) #DateTimeField()
+    endDate         = messages.StringField(10) 
     websafeKey      = messages.StringField(11)
     organizerDisplayName = messages.StringField(12)
 
 class ConferenceForms(messages.Message):
     """ConferenceForms -- multiple Conference outbound form message"""
     items = messages.MessageField(ConferenceForm, 1, repeated=True)
+
+class Session(ndb.Model):
+    """Session -- Session object"""
+    name            = ndb.StringProperty(required=True)
+    typeOfSession   = ndb.StringProperty()
+    highlights      = ndb.StringProperty()
+    speakers        = ndb.StringProperty(repeated=True)
+    date            = ndb.DateProperty()
+    startTime       = ndb.TimeProperty()
+    duration        = ndb.IntegerProperty()
+    conference      = ndb.StringProperty()
+    websafeConferenceKey = ndb.StringProperty()
+
+#to be sessionform
+class SessionForm(messages.Message):
+    """SessionForm -- Session outbound form message"""
+    name            = messages.StringField(1)
+    typeOfSession   = messages.StringField(2)
+    highlights      = messages.StringField(3)
+    speakers        = messages.StringField(4, repeated=True) 
+    date            = messages.StringField(5) 
+    startTime       = messages.StringField(6)
+    duration        = messages.IntegerField(7)
+    websafeKey      = messages.StringField(8)
+    conference      = messages.StringField(9)
+    websafeConferenceKey = messages.StringField(10)
+
 
 class TeeShirtSize(messages.Enum):
     """TeeShirtSize -- t-shirt size enumeration value"""
@@ -104,3 +132,6 @@ class ConferenceQueryForms(messages.Message):
     """ConferenceQueryForms -- multiple ConferenceQueryForm inbound form message"""
     filters = messages.MessageField(ConferenceQueryForm, 1, repeated=True)
 
+class StringMessage(messages.Message):
+    """StringMessage-- outbound (single) string message"""
+    data = messages.StringField(1, required=True)
